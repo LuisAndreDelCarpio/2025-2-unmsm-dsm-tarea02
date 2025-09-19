@@ -36,20 +36,28 @@ class CuentaAhorro(
         if (!cuentaActiva) {
             return
         }
-        if (numRetiros + numConsignaciones > 4) {
-            super.extractoMensual(1000.0f)
-            /*
-            Lo ideal sería implementar una lógica para considerar el tiempo de existencia de la cuenta
-            para poder actualizar la comisión mensual
-            */
-            isActivated()
+
+        var comisionCalculada = 0.0f
+
+        if (numRetiros > 4) {
+            val retirosExtra = numRetiros - 4
+            comisionCalculada = retirosExtra * 1000.0f
         }
+
+        super.extractoMensual(comisionCalculada)
+        isActivated()
     }
 
+
     private fun isActivated() {
-        if (saldo < 10000.0f) {
-            cuentaActiva = false
-        }
+//        if (saldo < 10000.0f) {
+//            cuentaActiva = false
+//        }
+        cuentaActiva = saldo >= 10000.0f // ahora actualizamos para ambos sentidos
+        /*
+        * si saldo es menor que 10k se pone cuentaActiva = false
+        * si saldo es igual o mayor a 10k se pone cuentaActiva = true
+        * */
     }
 
     fun cerrarMes() {
